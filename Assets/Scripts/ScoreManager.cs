@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ScoreManager : MonoBehaviour
+{
+    public static ScoreManager instance;
+    public int score;
+    public int hightScore;
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+    }
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //hightScore = 0;
+        PlayerPrefs.SetInt("hightScore", 0);
+        score = 0;
+        PlayerPrefs.SetInt("score", score);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void incrementScore()
+    {
+        score += 1;
+    }
+
+    public void startScore()
+    {
+        InvokeRepeating("incrementScore", 0.1f, 0.5f);
+    }
+
+    public void StopScore()
+    {
+        CancelInvoke("incrementScore");
+
+        PlayerPrefs.SetInt("score", score);
+
+
+        if (PlayerPrefs.HasKey("highScore"))
+        {
+            if (score > PlayerPrefs.GetInt("highScore"))
+            {
+                PlayerPrefs.SetInt("highScore", score);
+                Debug.Log(PlayerPrefs.GetInt("highScore").ToString());
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("highScore", score);
+        }
+    }
+
+
+}
